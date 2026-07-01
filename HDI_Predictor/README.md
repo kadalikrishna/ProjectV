@@ -89,6 +89,18 @@ Open the local URL shown in the terminal, usually:
 http://127.0.0.1:5000
 ```
 
+## Deployment Notes
+
+For platforms such as Render, Railway, or Heroku, set the project root to the
+`HDI_Predictor` folder. The included `Procfile` starts the app with Gunicorn:
+
+```text
+web: gunicorn app:app
+```
+
+The app reads the deployment port from the `PORT` environment variable and keeps
+debug mode off unless `FLASK_DEBUG=1` is set.
+
 ## Sample Input
 
 - Life Expectancy: `75.5`

@@ -73,16 +73,6 @@ a {
     white-space: nowrap;
 }
 
-.brand-logo,
-.footer-logo {
-    width: 36px;
-    height: 36px;
-    display: block;
-    border-radius: 999px;
-    background: var(--black);
-    object-fit: cover;
-}
-
 .nav-links {
     display: flex;
     align-items: center;
@@ -423,18 +413,47 @@ input:focus {
 .developer-credit {
     position: relative;
     z-index: 1;
-    margin: 0 20px 28px;
-    padding: 10px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 999px;
-    background: rgba(7, 10, 18, 0.38);
+    margin: 0 20px 34px;
+    width: min(1120px, calc(100% - 40px));
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: rgba(255, 255, 255, 0.84);
     text-align: center;
-    font-size: 0.92rem;
+    text-shadow: 0 4px 26px rgba(0, 0, 0, 0.78);
+}
+
+.developer-credit p {
+    margin: 0 0 10px;
+    color: #ffffff;
+    font-size: clamp(1rem, 2vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.18;
+    white-space: nowrap;
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.developer-credit p::before {
+    content: open-quote;
+}
+
+.developer-credit p::after {
+    content: close-quote;
+}
+
+.developer-credit span {
+    display: block;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.78rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    backdrop-filter: blur(8px);
+}
+
+.developer-credit p.quote-fade {
+    opacity: 0;
+    transform: translateY(10px);
 }
 
 .result-page {
@@ -577,6 +596,11 @@ input:focus {
 
     .hero h1 {
         font-size: 2.15rem;
+    }
+
+    .developer-credit p {
+        font-size: 0.88rem;
+        white-space: normal;
     }
 
     .feature-card {

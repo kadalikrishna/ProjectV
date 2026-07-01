@@ -17,6 +17,12 @@ FEATURE_COLUMNS = [
     "Expected Years of Schooling",
     "GNI per Capita",
 ]
+INPUT_LIMITS = {
+    "Life Expectancy": (0, 120),
+    "Mean Years of Schooling": (0, 30),
+    "Expected Years of Schooling": (0, 30),
+    "GNI per Capita": (0, 250000),
+}
 
 
 def load_model():
@@ -60,6 +66,16 @@ def category_message(category):
     return messages.get(category, "HDI category could not be explained.")
 
 
+def validate_inputs(values):
+    """Check that values stay inside realistic ranges before prediction."""
+    for column_name, value in zip(FEATURE_COLUMNS, values):
+        minimum, maximum = INPUT_LIMITS[column_name]
+        if value < minimum or value > maximum:
+            raise ValueError(
+                f"{column_name} must be between {minimum:g} and {maximum:g}."
+            )
+
+
 @app.route("/")
 def home():
     """Show the home page and prediction form."""
@@ -77,10 +93,10 @@ def predict():
         expected_schooling = float(request.form["expected_schooling"])
         gni_per_capita = float(request.form["gni_per_capita"])
 
-        input_data = pd.DataFrame(
-            [[life_expectancy, mean_schooling, expected_schooling, gni_per_capita]],
-            columns=FEATURE_COLUMNS,
-        )
+        values = [life_expectancy, mean_schooling, expected_schooling, gni_per_capita]
+        validate_inputs(values)
+
+        input_data = pd.DataFrame([values], columns=FEATURE_COLUMNS)
 
         predicted_score = round(float(model.predict(input_data)[0]), 3)
         predicted_score = max(0, min(1, predicted_score))
@@ -95,11 +111,8 @@ def predict():
 
     except FileNotFoundError as error:
         return render_template("result.html", error=str(error))
-    except ValueError:
-        return render_template(
-            "result.html",
-            error="Please enter valid numeric values in every field.",
-        )
+    except ValueError as error:
+        return render_template("result.html", error=str(error))
     except Exception as error:
         return render_template(
             "result.html",
@@ -108,4 +121,6 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    port = int(os.environ.get("PORT", 5000))
+    debug_mode = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug_mode, use_reloader=False)

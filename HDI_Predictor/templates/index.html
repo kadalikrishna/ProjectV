@@ -99,19 +99,19 @@
                 <form action="/predict" method="POST" class="prediction-form">
                     <div class="form-group">
                         <label for="life_expectancy">Life Expectancy</label>
-                        <input type="number" step="0.01" min="0" id="life_expectancy" name="life_expectancy" placeholder="e.g. 75.5" required>
+                        <input type="number" step="0.01" min="0" max="120" id="life_expectancy" name="life_expectancy" placeholder="e.g. 75.5" required>
                     </div>
                     <div class="form-group">
                         <label for="mean_schooling">Mean Years of Schooling</label>
-                        <input type="number" step="0.01" min="0" id="mean_schooling" name="mean_schooling" placeholder="e.g. 9.8" required>
+                        <input type="number" step="0.01" min="0" max="30" id="mean_schooling" name="mean_schooling" placeholder="e.g. 9.8" required>
                     </div>
                     <div class="form-group">
                         <label for="expected_schooling">Expected Years of Schooling</label>
-                        <input type="number" step="0.01" min="0" id="expected_schooling" name="expected_schooling" placeholder="e.g. 13.2" required>
+                        <input type="number" step="0.01" min="0" max="30" id="expected_schooling" name="expected_schooling" placeholder="e.g. 13.2" required>
                     </div>
                     <div class="form-group">
                         <label for="gni_per_capita">GNI per Capita</label>
-                        <input type="number" step="0.01" min="0" id="gni_per_capita" name="gni_per_capita" placeholder="e.g. 15980" required>
+                        <input type="number" step="0.01" min="0" max="250000" id="gni_per_capita" name="gni_per_capita" placeholder="e.g. 15980" required>
                     </div>
                     <button type="submit" class="primary-button form-button">Predict HDI</button>
                 </form>
@@ -119,7 +119,10 @@
         </section>
 
         <section class="developer-section" aria-label="Developer credit">
-            <p class="developer-credit">Developed by Kadali Naga Sri Krishna</p>
+            <div class="developer-credit">
+                <p id="rotating-quote">A better future starts with understanding today.</p>
+                <span>Developed by Kadali Naga Sri Krishna</span>
+            </div>
         </section>
     </main>
 
@@ -128,5 +131,30 @@
         <span>Empowering insights for a better tomorrow.</span>
         <span>Machine Learning Flask Project</span>
     </footer>
+
+    <script>
+        const hdiQuotes = [
+            "Progress begins where insight meets action.",
+            "Data becomes powerful when it helps people grow.",
+            "A better future starts with understanding today.",
+            "Human development is not just measured, it is built.",
+            "Behind every number is a story of health, learning, and opportunity.",
+            "Turn your pain into power.",
+            "Out of difficulties grow miracles."
+        ];
+
+        const quoteElement = document.getElementById("rotating-quote");
+        let quoteIndex = 0;
+
+        setInterval(() => {
+            quoteIndex = (quoteIndex + 1) % hdiQuotes.length;
+            quoteElement.classList.add("quote-fade");
+
+            setTimeout(() => {
+                quoteElement.textContent = hdiQuotes[quoteIndex];
+                quoteElement.classList.remove("quote-fade");
+            }, 700);
+        }, 5000);
+    </script>
 </body>
 </html>
