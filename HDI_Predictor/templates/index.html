@@ -10,7 +10,6 @@
     <header class="site-header">
         <nav class="navbar">
             <a class="brand" href="/">
-                <span class="brand-mark">↗</span>
                 HDI Predictor
             </a>
             <div class="nav-links">
@@ -33,14 +32,6 @@
                 </p>
                 <a class="primary-button" href="#predict">Start Prediction <span>→</span></a>
             </div>
-            <div class="hero-visual" aria-hidden="true">
-                <div class="orbit">
-                    <div class="globe">HDI</div>
-                    <div class="metric metric-health">Health</div>
-                    <div class="metric metric-education">School</div>
-                    <div class="metric metric-income">GNI</div>
-                </div>
-            </div>
         </section>
 
         <section class="section about-section" id="about">
@@ -62,19 +53,36 @@
             </div>
             <div class="feature-grid">
                 <article class="feature-card">
-                    <span class="feature-icon health-icon">+</span>
+                    <span class="feature-icon health-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M20.8 4.9a5.4 5.4 0 0 0-7.6 0L12 6.1l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21.2l8.8-8.7a5.4 5.4 0 0 0 0-7.6Z"/>
+                            <path d="M4.8 12h3.5l1.5-3.2 2.3 6.4 1.5-3.2h5.6"/>
+                        </svg>
+                    </span>
                     <h3>Health</h3>
                     <p class="feature-label">Life Expectancy</p>
                     <p>A longer life expectancy indicates better health outcomes.</p>
                 </article>
                 <article class="feature-card">
-                    <span class="feature-icon education-icon">^</span>
+                    <span class="feature-icon education-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M3 8.4 12 4l9 4.4-9 4.4-9-4.4Z"/>
+                            <path d="M7 11v4.8c0 1.4 2.2 2.6 5 2.6s5-1.2 5-2.6V11"/>
+                            <path d="M21 8.5v6"/>
+                        </svg>
+                    </span>
                     <h3>Education</h3>
                     <p class="feature-label">Schooling Years</p>
                     <p>Mean and expected schooling reflect current and future learning.</p>
                 </article>
                 <article class="feature-card">
-                    <span class="feature-icon income-icon">$</span>
+                    <span class="feature-icon income-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M12 3v18"/>
+                            <path d="M17 7.2c-.9-1-2.4-1.7-4.2-1.7-2.4 0-4.2 1.1-4.2 2.8 0 4.2 8.8 1.8 8.8 6.4 0 1.9-2 3.3-4.8 3.3-2 0-3.9-.8-5-2"/>
+                            <path d="M5 20h14"/>
+                        </svg>
+                    </span>
                     <h3>Income</h3>
                     <p class="feature-label">GNI Per Capita</p>
                     <p>Income per person reflects economic strength and living standards.</p>
@@ -109,10 +117,14 @@
                 </form>
             </div>
         </section>
+
+        <section class="developer-section" aria-label="Developer credit">
+            <p class="developer-credit">Developed by Kadali Naga Sri Krishna</p>
+        </section>
     </main>
 
     <footer class="site-footer">
-        <strong>HDI Predictor</strong>
+        <span>Developed by Kadali Naga Sri Krishna</span>
         <span>Empowering insights for a better tomorrow.</span>
         <span>Machine Learning Flask Project</span>
     </footer>
