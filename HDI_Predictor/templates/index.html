@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDI Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <a class="brand" href="/">
+                <span class="brand-mark">↗</span>
+                HDI Predictor
+            </a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#features">Features</a>
+                <a href="#predict">Predict</a>
+            </div>
+            <a class="nav-cta" href="#predict">Start Prediction</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-copy">
+                <span class="eyebrow">Data - Health - Education - Income</span>
+                <h1>Predict Human Development Index with Machine Learning</h1>
+                <p>
+                    Analyze health, education, and income indicators to estimate
+                    a country's development level.
+                </p>
+                <a class="primary-button" href="#predict">Start Prediction <span>→</span></a>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <div class="orbit">
+                    <div class="globe">HDI</div>
+                    <div class="metric metric-health">Health</div>
+                    <div class="metric metric-education">School</div>
+                    <div class="metric metric-income">GNI</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section about-section" id="about">
+            <div class="section-heading">
+                <span class="eyebrow">About HDI</span>
+                <h2>A simple score for development progress</h2>
+                <p>
+                    The Human Development Index is a number between 0 and 1 that
+                    summarizes how well a country is doing in long life, learning,
+                    and standard of living.
+                </p>
+            </div>
+        </section>
+
+        <section class="section" id="features">
+            <div class="section-heading">
+                <h2>Key Factors That Shape HDI</h2>
+                <p>Four important indicators used to estimate human development.</p>
+            </div>
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <span class="feature-icon health-icon">+</span>
+                    <h3>Health</h3>
+                    <p class="feature-label">Life Expectancy</p>
+                    <p>A longer life expectancy indicates better health outcomes.</p>
+                </article>
+                <article class="feature-card">
+                    <span class="feature-icon education-icon">^</span>
+                    <h3>Education</h3>
+                    <p class="feature-label">Schooling Years</p>
+                    <p>Mean and expected schooling reflect current and future learning.</p>
+                </article>
+                <article class="feature-card">
+                    <span class="feature-icon income-icon">$</span>
+                    <h3>Income</h3>
+                    <p class="feature-label">GNI Per Capita</p>
+                    <p>Income per person reflects economic strength and living standards.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section predict-section" id="predict">
+            <div class="prediction-card">
+                <div class="section-heading compact">
+                    <h2>Predict HDI Score</h2>
+                    <p>Enter country indicators below to estimate its development level.</p>
+                </div>
+                <form action="/predict" method="POST" class="prediction-form">
+                    <div class="form-group">
+                        <label for="life_expectancy">Life Expectancy</label>
+                        <input type="number" step="0.01" min="0" id="life_expectancy" name="life_expectancy" placeholder="e.g. 75.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mean_schooling">Mean Years of Schooling</label>
+                        <input type="number" step="0.01" min="0" id="mean_schooling" name="mean_schooling" placeholder="e.g. 9.8" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expected_schooling">Expected Years of Schooling</label>
+                        <input type="number" step="0.01" min="0" id="expected_schooling" name="expected_schooling" placeholder="e.g. 13.2" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gni_per_capita">GNI per Capita</label>
+                        <input type="number" step="0.01" min="0" id="gni_per_capita" name="gni_per_capita" placeholder="e.g. 15980" required>
+                    </div>
+                    <button type="submit" class="primary-button form-button">Predict HDI</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <strong>HDI Predictor</strong>
+        <span>Empowering insights for a better tomorrow.</span>
+        <span>Machine Learning Flask Project</span>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDI Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <a class="brand" href="/">
+                <span class="brand-mark">↗</span>
+                HDI Predictor
+            </a>
+            <div class="nav-links">
+                <a href="/#about">About</a>
+                <a href="/#features">Features</a>
+                <a href="/#predict">Predict</a>
+            </div>
+            <a class="nav-cta" href="/#predict">Predict Again</a>
+        </nav>
+    </header>
+
+    <main class="result-page">
+        <section class="result-card">
+            {% if error %}
+                <span class="eyebrow">Prediction Error</span>
+                <h1>We could not calculate the HDI score.</h1>
+                <p class="result-message">{{ error }}</p>
+                <a class="primary-button" href="/#predict">Back to Form</a>
+            {% else %}
+                <span class="eyebrow">Prediction Complete</span>
+                <h1>Estimated Human Development Index</h1>
+                <div class="score-panel">
+                    <p>Predicted HDI Score</p>
+                    <strong>{{ score }}</strong>
+                </div>
+                <div class="category-row">
+                    <span>HDI Category</span>
+                    <strong class="category-badge">{{ category }}</strong>
+                </div>
+                <p class="result-message">{{ message }}</p>
+                <a class="primary-button" href="/#predict">Predict Again</a>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <strong>HDI Predictor</strong>
+        <span>Empowering insights for a better tomorrow.</span>
+        <span>Machine Learning Flask Project</span>
+    </footer>
+</body>
+</html>
