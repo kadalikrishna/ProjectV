@@ -2,18 +2,29 @@
 
 import os
 import sqlite3
+import tempfile
 from pathlib import Path
+
+import pandas as pd
 
 
 BASE_DIR = Path(__file__).resolve().parent
-DATABASE_PATH = BASE_DIR / "hdi_predictor.db"
+DEFAULT_DATABASE_PATH = (
+    Path(tempfile.gettempdir()) / "hdi_predictor.db"
+    if os.environ.get("VERCEL")
+    else BASE_DIR / "hdi_predictor.db"
+)
+DATABASE_PATH = Path(os.environ.get("HDI_DATABASE_PATH", DEFAULT_DATABASE_PATH))
 SCHEMA_PATH = BASE_DIR / "schema.sql"
+DATASET_PATH = BASE_DIR / "dataset.csv"
+MODEL_PATH = BASE_DIR / "hdi_model.pkl"
 DEFAULT_USER_EMAIL = "guest@hdi-predictor.local"
 DEFAULT_MODEL_NAME = "HDI Linear Regression Model"
 
 
 def get_connection():
     """Create a SQLite connection with foreign keys and row dictionaries."""
+    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
     connection = sqlite3.connect(DATABASE_PATH)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
@@ -24,6 +35,101 @@ def initialize_database():
     """Create all ERD tables from schema.sql."""
     with get_connection() as connection:
         connection.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
+        connection.commit()
+
+
+def seed_dataset_metadata(connection):
+    """Insert dataset metadata if dataset.csv is available."""
+    if not DATASET_PATH.exists():
+        return
+
+    row = connection.execute(
+        "SELECT dataset_id FROM dataset WHERE dataset_name = ?",
+        ("Human Development Index - Full.csv",),
+    ).fetchone()
+    if row:
+        return
+
+    df = pd.read_csv(DATASET_PATH)
+    connection.execute(
+        """
+        INSERT INTO dataset (dataset_name, source, total_rows, total_columns)
+        VALUES (?, ?, ?, ?)
+        """,
+        (
+            "Human Development Index - Full.csv",
+            "UNDP Human Development Index dataset",
+            int(df.shape[0]),
+            int(df.shape[1]),
+        ),
+    )
+
+
+def seed_model_metadata(connection):
+    """Insert the active model metadata if it is not already present."""
+    row = connection.execute(
+        "SELECT model_id FROM ml_model WHERE model_name = ?", (DEFAULT_MODEL_NAME,)
+    ).fetchone()
+    if row:
+        return
+
+    connection.execute(
+        """
+        INSERT INTO ml_model (
+            model_name, algorithm_used, accuracy_score, r2_score, model_file_path
+        )
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            DEFAULT_MODEL_NAME,
+            "Linear Regression",
+            0.9582,
+            0.9582,
+            os.path.relpath(MODEL_PATH, BASE_DIR),
+        ),
+    )
+
+
+def seed_countries(connection):
+    """Insert countries from dataset.csv if the country table is empty."""
+    country_count = connection.execute(
+        "SELECT COUNT(*) AS count FROM country"
+    ).fetchone()["count"]
+    if country_count or not DATASET_PATH.exists():
+        return
+
+    df = pd.read_csv(DATASET_PATH)
+    if "Country" not in df.columns:
+        return
+
+    region_column = "UNDP Developing Regions"
+    countries = []
+    for _, row in df.iterrows():
+        country_name = row.get("Country")
+        if pd.isna(country_name) or not str(country_name).strip():
+            continue
+        region = row.get(region_column) if region_column in df.columns else None
+        if pd.isna(region):
+            region = None
+        countries.append((str(country_name).strip(), region, None))
+
+    connection.executemany(
+        """
+        INSERT OR IGNORE INTO country (country_name, region, population)
+        VALUES (?, ?, ?)
+        """,
+        countries,
+    )
+
+
+def ensure_seed_data():
+    """Create tables and seed default records for runtime use."""
+    initialize_database()
+    with get_connection() as connection:
+        get_or_create_default_user(connection)
+        seed_dataset_metadata(connection)
+        seed_model_metadata(connection)
+        seed_countries(connection)
         connection.commit()
 
 
@@ -96,8 +202,7 @@ def get_country_id_by_name(connection, country_name):
 
 def list_countries():
     """Return country names for the prediction dropdown."""
-    if not os.path.exists(DATABASE_PATH):
-        initialize_database()
+    ensure_seed_data()
 
     with get_connection() as connection:
         rows = connection.execute(
@@ -108,7 +213,7 @@ def list_countries():
 
 def save_prediction_record(values, predicted_score, category, country_name=None):
     """Persist one full ERD prediction flow and return the prediction id."""
-    initialize_database()
+    ensure_seed_data()
     with get_connection() as connection:
         user_id = get_or_create_default_user(connection)
         create_session(connection, user_id)
@@ -160,7 +265,7 @@ def save_prediction_record(values, predicted_score, category, country_name=None)
 
 def get_recent_predictions(limit=10):
     """Return recent prediction history with input and country details."""
-    initialize_database()
+    ensure_seed_data()
     with get_connection() as connection:
         rows = connection.execute(
             """
