@@ -6,6 +6,8 @@ import pickle
 import pandas as pd
 from flask import Flask, render_template, request
 
+from database import get_recent_predictions, list_countries, save_prediction_record
+
 
 app = Flask(__name__)
 
@@ -79,7 +81,8 @@ def validate_inputs(values):
 @app.route("/")
 def home():
     """Show the home page and prediction form."""
-    return render_template("index.html")
+    countries = list_countries()
+    return render_template("index.html", countries=countries)
 
 
 @app.route("/predict", methods=["POST"])
@@ -92,6 +95,7 @@ def predict():
         mean_schooling = float(request.form["mean_schooling"])
         expected_schooling = float(request.form["expected_schooling"])
         gni_per_capita = float(request.form["gni_per_capita"])
+        country_name = request.form.get("country_name") or None
 
         values = [life_expectancy, mean_schooling, expected_schooling, gni_per_capita]
         validate_inputs(values)
@@ -101,12 +105,16 @@ def predict():
         predicted_score = round(float(model.predict(input_data)[0]), 3)
         predicted_score = max(0, min(1, predicted_score))
         category = classify_hdi(predicted_score)
+        prediction_id = save_prediction_record(
+            values, predicted_score, category, country_name
+        )
 
         return render_template(
             "result.html",
             score=f"{predicted_score:.3f}",
             category=category,
             message=category_message(category),
+            prediction_id=prediction_id,
         )
 
     except FileNotFoundError as error:
@@ -118,6 +126,13 @@ def predict():
             "result.html",
             error=f"Something went wrong while making the prediction: {error}",
         )
+
+
+@app.route("/history")
+def history():
+    """Show recent database-backed HDI predictions."""
+    predictions = get_recent_predictions(limit=10)
+    return render_template("history.html", predictions=predictions)
 
 
 if __name__ == "__main__":

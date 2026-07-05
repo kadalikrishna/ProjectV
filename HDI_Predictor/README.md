@@ -77,6 +77,15 @@ This creates:
 - `static/plots/scatter_plot.png`
 - `static/plots/strip_plot.png`
 
+## How to Initialize the ERD Database
+
+```bash
+python init_db.py
+```
+
+This creates `hdi_predictor.db` with tables for users, sessions, countries,
+datasets, ML models, input data, predictions, and visualization reports.
+
 ## How to Run the Flask App
 
 ```bash

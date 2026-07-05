@@ -364,7 +364,8 @@ label {
     font-weight: 800;
 }
 
-input {
+input,
+select {
     width: 100%;
     min-height: 54px;
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -377,7 +378,12 @@ input {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input:focus {
+select {
+    cursor: pointer;
+}
+
+input:focus,
+select:focus {
     border-color: rgba(255, 255, 255, 0.78);
     box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
 }
@@ -464,6 +470,64 @@ input:focus {
     background:
         linear-gradient(90deg, rgba(8, 9, 15, 0.18), rgba(7, 9, 16, 0.84)),
         url("hero-bg.jfif") center / cover no-repeat;
+}
+
+.history-page {
+    min-height: calc(100vh - 78px);
+    padding: 128px 20px 64px;
+    background:
+        linear-gradient(90deg, rgba(8, 9, 15, 0.18), rgba(7, 9, 16, 0.84)),
+        url("hero-bg.jfif") center / cover no-repeat fixed;
+}
+
+.history-panel {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    padding: 36px;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: rgba(10, 14, 24, 0.82);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(20px);
+}
+
+.history-panel h1 {
+    margin: 18px 0 26px;
+    color: #ffffff;
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    line-height: 1.05;
+}
+
+.history-table-wrap {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 980px;
+}
+
+.history-table th,
+.history-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 14px 12px;
+    color: var(--muted);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.history-table th {
+    color: #ffffff;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.history-table td:nth-child(3),
+.history-table td:nth-child(4) {
+    color: #ffffff;
+    font-weight: 700;
 }
 
 .result-card {

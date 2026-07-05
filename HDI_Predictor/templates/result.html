@@ -16,6 +16,7 @@
                 <a href="/#about">About</a>
                 <a href="/#features">Features</a>
                 <a href="/#predict">Predict</a>
+                <a href="/history">History</a>
             </div>
             <a class="nav-cta" href="/#predict">Predict Again</a>
         </nav>
@@ -40,6 +41,9 @@
                     <strong class="category-badge">{{ category }}</strong>
                 </div>
                 <p class="result-message">{{ message }}</p>
+                {% if prediction_id %}
+                    <p class="result-message">Saved prediction ID: {{ prediction_id }}</p>
+                {% endif %}
                 <a class="primary-button" href="/#predict">Predict Again</a>
             {% endif %}
         </section>

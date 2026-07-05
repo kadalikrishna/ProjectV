@@ -16,6 +16,7 @@
                 <a href="#about">About</a>
                 <a href="#features">Features</a>
                 <a href="#predict">Predict</a>
+                <a href="/history">History</a>
             </div>
             <a class="nav-cta" href="#predict">Start Prediction</a>
         </nav>
@@ -97,6 +98,15 @@
                     <p>Enter country indicators below to estimate its development level.</p>
                 </div>
                 <form action="/predict" method="POST" class="prediction-form">
+                    <div class="form-group">
+                        <label for="country_name">Country</label>
+                        <select id="country_name" name="country_name">
+                            <option value="">Optional country</option>
+                            {% for country in countries %}
+                                <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="life_expectancy">Life Expectancy</label>
                         <input type="number" step="0.01" min="0" max="120" id="life_expectancy" name="life_expectancy" placeholder="e.g. 75.5" required>

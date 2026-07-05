@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDI Prediction History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <a class="brand" href="/">HDI Predictor</a>
+            <div class="nav-links">
+                <a href="/#about">About</a>
+                <a href="/#features">Features</a>
+                <a href="/#predict">Predict</a>
+                <a href="/history">History</a>
+            </div>
+            <a class="nav-cta" href="/#predict">Predict Again</a>
+        </nav>
+    </header>
+
+    <main class="history-page">
+        <section class="history-panel">
+            <span class="eyebrow">Database Records</span>
+            <h1>Recent HDI Predictions</h1>
+            {% if predictions %}
+                <div class="history-table-wrap">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Country</th>
+                                <th>HDI Score</th>
+                                <th>Category</th>
+                                <th>Life</th>
+                                <th>Mean School</th>
+                                <th>Expected School</th>
+                                <th>GNI</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prediction in predictions %}
+                                <tr>
+                                    <td>{{ prediction.prediction_id }}</td>
+                                    <td>{{ prediction.country_name or "Not selected" }}</td>
+                                    <td>{{ "%.3f"|format(prediction.predicted_hdi_score) }}</td>
+                                    <td>{{ prediction.hdi_category }}</td>
+                                    <td>{{ prediction.life_expectancy }}</td>
+                                    <td>{{ prediction.mean_years_schooling }}</td>
+                                    <td>{{ prediction.expected_years_schooling }}</td>
+                                    <td>{{ prediction.gni_per_capita }}</td>
+                                    <td>{{ prediction.prediction_time }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="result-message">No saved predictions yet. Run a prediction to create ERD records.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span>Developed by Kadali Naga Sri Krishna</span>
+        <span>Empowering insights for a better tomorrow.</span>
+        <span>Machine Learning Flask Project</span>
+    </footer>
+</body>
+</html>
